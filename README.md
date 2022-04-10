@@ -320,6 +320,14 @@ $(NAME) : $(OBJS)
 all : $(NAME)
 ```
 - Note that 0x00FF0000 is the hex representation of ARGB(0,255,0,0).
+- here we used a new mly_put_image_to_window let's have a look at what it is.
+- The user can draw inside the image (see below), and can dump the image inside a specified window at any time to display it on the screen.
+- This is done using mlx_put_image_to_window().
+- Three identifiers are needed here for the connection to the display, the window to use, and the image (respectively mlx_ptr , win_ptr and img_ptr ). The (x , y) coordinates define where the image should be placed in the window.
+```
+int
+mlx_put_image_to_window ( void *mlx_ptr, void *win_ptr, void *img_ptr, int x, int y );
+```
 
 
 
