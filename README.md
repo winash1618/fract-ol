@@ -200,6 +200,7 @@ int	main(void)
 								&img.endian);
 }
 ```
+- Notice how we pass the bits_per_pixel, line_length and endian variables by reference? These will be set accordingly by MiniLibX as per described above.
 - here's a simple make file for the above program.
 ```
 NAME		=	4-Getting_memory_address_to_mutate
@@ -236,6 +237,89 @@ mlx_get_data_addr ( void *img_ptr, int *bits_per_pixel, int *size_line, int *end
 - The second group of bits_per_pixel bits represent the second pixel of the first line, and so on.
 - Add size_line to the adress to get the begining of the second line. You can reach any pixels of the image that way.
 - mlx_destroy_image destroys the given image (img_ptr).
+### Memory offset calculation
+- Now we have the image address, but still no pixels. Before we start with this, we must understand that the bytes are not aligned, this means that the line_length differs from the actual window width. We therefore should ALWAYS calculate the memory offset using the line length set by mlx_get_data_addr.
+- We can calculate it very easily by using the following formula:
+```
+int offset = (y * line_length + x * (bits_per_pixel / 8));
+```
+### Memory offset function
+```
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+```
+- Note that this will cause an issue. Because an image is represented in real time in a window, changing the same image will cause a bunch of screen-tearing when writing to it. You should therefore create two or more images to hold your frames temporarily. You can then write to a temporary image, so that you don’t have to write to the currently presented image.
+### Pushing images to a window
+- Now that we can finally create our image, we should also push it to the window, so that we can actually see it. This is pretty straight forward, let’s take a look at how we can write a red pixel at (5,5) and put it to our window:
+```
+#include "minilibx/mlx.h"
+
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
+int	main(void)
+{
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img;
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
+	img.img = mlx_new_image(mlx, 1920, 1080);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+								&img.endian);
+	my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
+	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	mlx_loop(mlx);
+}
+```
+- here's a simple make file to run above program.
+```
+NAME		=	5-Pushing_images_to_a_window
+LIBX_DIR	=	minilibx
+LIBX		=	libmlx.a
+FRAMEWORK	=	-L $(LIBX_DIR) -lmlx -framework OpenGL -framework AppKit
+SRCS = 5-Pushing_images_to_a_window.c
+OBJS		=	$(SRCS:%c=%o)
+CC			=	gcc
+CFLAGS		=	-Wall -Wextra -Werror -Ofast
+
+%.o : %.c
+	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+
+$(NAME) : $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(FRAMEWORK) -o $(NAME)
+	@rm -f 5-Pushing_images_to_a_window.o
+
+all : $(NAME)
+```
+- Note that 0x00FF0000 is the hex representation of ARGB(0,255,0,0).
 
 
 
