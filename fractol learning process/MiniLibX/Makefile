@@ -1,8 +1,8 @@
-NAME		=	9-print_hexagons
+NAME		=	11-julia_set
 LIBX_DIR	=	minilibx
 LIBX		=	libmlx.a
 FRAMEWORK	=	-L $(LIBX_DIR) -lmlx -framework OpenGL -framework AppKit
-SRCS = 9-print_hexagons.c
+SRCS = 11-julia_set.c
 OBJS		=	$(SRCS:%c=%o)
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -Ofast
@@ -12,6 +12,6 @@ CFLAGS		=	-Wall -Wextra -Werror -Ofast
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(FRAMEWORK) -o $(NAME)
-	@rm -f 9-print_hexagons.o
+	@rm -f 11-julia_set.o
 
 all : $(NAME)
