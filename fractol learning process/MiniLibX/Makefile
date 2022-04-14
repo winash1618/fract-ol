@@ -1,8 +1,8 @@
-NAME		=	11-julia_set
+NAME		=	12-julia_events
 LIBX_DIR	=	minilibx
 LIBX		=	libmlx.a
 FRAMEWORK	=	-L $(LIBX_DIR) -lmlx -framework OpenGL -framework AppKit
-SRCS = 11-julia_set.c
+SRCS = 12-julia_events.c
 OBJS		=	$(SRCS:%c=%o)
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -Ofast
@@ -12,6 +12,6 @@ CFLAGS		=	-Wall -Wextra -Werror -Ofast
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(FRAMEWORK) -o $(NAME)
-	@rm -f 11-julia_set.o
+	@rm -f 12-julia_events.o
 
 all : $(NAME)
