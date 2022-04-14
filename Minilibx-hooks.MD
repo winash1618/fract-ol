@@ -70,12 +70,14 @@ up event (3).
     ```
 ### Prototype of event functions
   -  When  it catches an event, the MiniLibX calls the corresponding function with fixed parameters:
-    -  expose_hook(void *param); or int (*f)(void *param);
-    -  key_hook(int keycode,void *param); or int (*f)(int keycode, void *param);
-    -  mouse_hook(int button,int x,int y,void *param); or int (*f)(int button, int x, int y, void *param);
-    -  loop_hook(void *param); or int (*f)(void *param);
-  -  These function names are arbitrary. They here are used to distinguish parameters  according
-   to the event. These functions are NOT part of the MiniLibX.
+    - ON_KEYDOWN :	2	: int (*f)(int keycode, void *param)
+    - ON_KEYUP :	3	: int (*f)(int keycode, void *param)
+    - ON_MOUSEDOWN : 4 :	int (*f)(int button, int x, int y, void *param)
+    - ON_MOUSEUP : 5 : int (*f)(int button, int x, int y, void *param)
+    - ON_MOUSEMOVE	: 6	: int (*f)(int x, int y, void *param)
+    - ON_EXPOSE : 12 : int (*f)(void *param)
+    - ON_DESTROY	: 17	: int (*f)(void *param)
+  -  These function names are arbitrary. They here are used to distinguish parameters  according to the event. These functions are NOT part of the MiniLibX.
   - ( x , y ) are the coordinates of the  mouse click in the window, and button tells you which mouse button was pressed.
 
 ### Hooking into mouse events
@@ -89,5 +91,121 @@ up event (3).
     - Middle click: 3
     - Scroll up: 4
     - Scroll down : 5
-        <img width="279" alt="Screen Shot 2022-04-14 at 9 02 55 AM" src="https://user-images.githubusercontent.com/51042907/163317033-775504e1-5b8d-4718-a048-514f63de6d27.png">
+       
+       <img width="279" alt="Screen Shot 2022-04-14 at 9 02 55 AM" src="https://user-images.githubusercontent.com/51042907/163317033-775504e1-5b8d-4718-a048-514f63de6d27.png">
 
+## Examples
+### A key is pressed, it will print the key code in the terminal
+  ```
+  #include "minilibx/mlx.h"
+  #include <math.h>
+  #include <stdio.h>
+  #include "ft_putnbr_fd.c"
+  typedef struct	s_vars {
+    void	*mlx;
+    void	*win;
+  }	t_vars;
+
+  typedef struct	s_data {
+    void	*img;
+    char	*addr;
+    int		bits_per_pixel;
+    int		line_length;
+    int		endian;
+  }	t_data;
+
+  int	key_check(int keycode, t_vars *vars)
+  {
+    printf("%d", keycode);
+    fflush(stdout);
+    if (keycode == 53)
+      mlx_destroy_window(vars->mlx, vars->win);
+    return (keycode);
+  }
+
+  void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+  {
+    char	*dst;
+
+    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+  }
+
+  int	main(void)
+  {
+    t_vars	new;
+    t_data	img;
+
+    new.mlx = mlx_init();
+    new.win = mlx_new_window(new.mlx, 1920, 1080, "Hello world!");
+    img.img = mlx_new_image(new.mlx, 1920, 1080);
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+    mlx_put_image_to_window(new.mlx, new.win, img.img, 0, 0);
+    mlx_hook(new.win, 2, 0, key_check, &new);
+    mlx_loop(new.mlx);
+  }
+```
+
+### The mouse if moved, it will print the current position of that mouse in the terminal
+```
+  #include "minilibx/mlx.h"
+  #include <math.h>
+  #include <stdio.h>
+  typedef struct	s_vars {
+    void	*mlx;
+    void	*win;
+  }	t_vars;
+
+  typedef struct	s_data {
+    void	*img;
+    char	*addr;
+    int		bits_per_pixel;
+    int		line_length;
+    int		endian;
+  }	t_data;
+
+  int	key_check(int keycode, t_vars *vars)
+  {
+    printf("%d", keycode);
+    fflush(stdout);
+    if (keycode == 53)
+      mlx_destroy_window(vars->mlx, vars->win);
+    return (keycode);
+  }
+
+  int	mouse_move(int x, int y, t_vars *vars)
+  {
+    printf("%d %d \n", x, y);
+    fflush(stdout);
+    (void)vars;
+    return (0);
+  }
+
+  void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+  {
+    char	*dst;
+
+    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
+  }
+
+  int	main(void)
+  {
+    t_vars	new;
+    t_data	img;
+
+    new.mlx = mlx_init();
+    new.win = mlx_new_window(new.mlx, 1920, 1080, "Hello world!");
+    img.img = mlx_new_image(new.mlx, 1920, 1080);
+    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+    mlx_put_image_to_window(new.mlx, new.win, img.img, 0, 0);
+    mlx_hook(new.win, 2, 0, key_check, &new);
+    mlx_hook(new.win, 6, 0, mouse_move, &new);
+    mlx_loop(new.mlx);
+  }
+```
+
+### A mouse is pressed, it will print the angle at which it moved over the window to the terminal
+```
+  
+```
