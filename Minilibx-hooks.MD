@@ -72,7 +72,7 @@ up event (3).
   -  When  it catches an event, the MiniLibX calls the corresponding function with fixed parameters:
     - ON_KEYDOWN :	2	: int (*f)(int keycode, void *param)
     - ON_KEYUP :	3	: int (*f)(int keycode, void *param)
-    - ON_MOUSEDOWN : 4 :	int (*f)(int button, int x, int y, void *param)
+    - ON_MOUSEDOWN : 4 :	int (*f)(int button, int x, int y, void *param) // here button can be from 1 to 5
     - ON_MOUSEUP : 5 : int (*f)(int button, int x, int y, void *param)
     - ON_MOUSEMOVE	: 6	: int (*f)(int x, int y, void *param)
     - ON_EXPOSE : 12 : int (*f)(void *param)
@@ -207,5 +207,68 @@ up event (3).
 
 ### A mouse is pressed, it will print the angle at which it moved over the window to the terminal
 ```
-  
+  #include "minilibx/mlx.h"
+#include <math.h>
+#include <stdio.h>
+typedef struct	s_vars {
+	void	*mlx;
+	void	*win;
+	double	x;
+	double y;
+}	t_vars;
+
+
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_data;
+
+int	key_check(int keycode, t_vars *vars)
+{
+	printf("%d", keycode);
+	fflush(stdout);
+	if (keycode == 53)
+		mlx_destroy_window(vars->mlx, vars->win);
+	return (keycode);
+}
+
+int left_click(int button, int x, int y, t_vars *vars)
+{
+	if (button == 1)
+	{
+		printf("%d %d %d \n", button, x, y);
+		fflush(stdout);
+		vars->x = x;
+		vars->y = y;
+	}
+	printf("%f %f %f \n", vars->x, vars->y, (180 / 3.14)*atan((vars->y - y)/(vars->x - x)));
+	fflush(stdout);
+	return (0);
+}
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
+}
+
+int	main(void)
+{
+	t_vars	new;
+	t_data	img;
+
+	new.mlx = mlx_init();
+	new.win = mlx_new_window(new.mlx, 1920, 1080, "Hello world!");
+	img.img = mlx_new_image(new.mlx, 1920, 1080);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	mlx_put_image_to_window(new.mlx, new.win, img.img, 0, 0);
+	mlx_hook(new.win, 2, 0, key_check, &new);
+	mlx_hook(new.win, 4, 0, left_click, &new);
+	mlx_loop(new.mlx);
+}
 ```
