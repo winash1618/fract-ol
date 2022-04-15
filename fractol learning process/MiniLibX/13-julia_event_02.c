@@ -1,7 +1,3 @@
-/////////////////////////////////////////////////////////////////////////
-///////////****Destroy the window when a key is pressed*****/////////////
-/////////////////////////////////////////////////////////////////////////
-
 #include "minilibx/mlx.h"
 #include <math.h>
 #include <stdio.h>
@@ -19,11 +15,13 @@ typedef struct	s_data {
 	int		endian;
 }	t_data;
 
-int	close(int keycode, t_vars *vars)
+int	key_check(int keycode, t_vars *vars)
 {
-	mlx_destroy_window(vars->mlx, vars->win);
-	keycode++;
-	return (0);
+	// printf("%d", keycode);
+	// fflush(stdout); If you are not getting any output with printf because the program is still running you can use fflush.
+	if (keycode == 53)
+		mlx_destroy_window(vars->mlx, vars->win);
+	return (keycode);
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -86,6 +84,6 @@ int	main(void)
 		xk++;
 	}
 	mlx_put_image_to_window(new.mlx, new.win, img.img, 0, 0);
-	mlx_hook(new.win, 2, 1L<<0, close, &new);
+	mlx_hook(new.win, 2, 0, key_check, &new);
 	mlx_loop(new.mlx);
 }

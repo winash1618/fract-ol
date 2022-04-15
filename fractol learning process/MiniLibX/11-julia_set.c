@@ -1,5 +1,6 @@
 #include "minilibx/mlx.h"
 #include <math.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 typedef struct	s_data {
@@ -17,6 +18,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
+int	ft_exit(void)
+{
+	exit (1);
+	return (0);
+}
 
 int	main(void)
 {
@@ -29,8 +35,8 @@ int	main(void)
 	img.img = mlx_new_image(mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
-	double re_c = 0.7;
-	double im_c = 0.27015;
+	double re_c = 0.5;
+	double im_c = -0.5;
 	double newm = 0;
 	double newi = 0;
 	double oldm = 0;
@@ -52,7 +58,7 @@ int	main(void)
 	// 		newm = 1.5*(xk - 1920 / 2) / (0.5 * 1920);
 	// 		newi = (yk - 1080 / 2) / (0.5 * 1080);
 			int i = 0;
-			while (i < 20)
+			while (i < 100)
 			{
 				oldm = newm;
 				oldi = newi;
@@ -65,12 +71,13 @@ int	main(void)
 			if (newm * newm + newi * newi < 4)
 			{
 				// printf("%f \n", newm * newm + newi * newi);
-				my_mlx_pixel_put(&img, xk, yk, 0x00FF0000);
+				my_mlx_pixel_put(&img, xk, yk,);
 			}
 			yk++;
 		}
 		xk++;
 	}
+	mlx_hook(mlx_win, 17, 1L<<17, ft_exit , 0);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
