@@ -1,25 +1,8 @@
 #include "../includes/fractol.h"
 
-// void render_image(t_vars *new, double x, double y, double zoom)
-// {
-
-// }
 void render_image_m(t_vars *new, double x, double y, double zoom)
 {
-	//init_render(new, x, y, zoom);
-	new->newm = 0;
-	new->newi = 0;
-	new->oldm = 0;
-	new->oldi = 0;
-	new->xk = 0;
-	new->yk = 0;
-	new->mx = x / 1920;
-	new->my = y / 1080;
-	new->mx = 0;
-	new->my = 0;
-	new->zoom = new->zoom * zoom;
-	printf("%f", new->zoom);
-	fflush(stdout);
+	init_zoom(new, x, y, zoom);
 	while (new->xk < 1920)
 	{
 		new->yk = 0;
@@ -31,20 +14,10 @@ void render_image_m(t_vars *new, double x, double y, double zoom)
 			new->newi = 0;
 			new->oldm = 0;
 			new->oldi = 0;
-			int i = 0;
-			while (i < 500)
-			{
-				new->oldm = new->newm;
-				new->oldi = new->newi;
-				new->newm = new->oldm * new->oldm - new->oldi * new->oldi + new->re_c;
-				new->newi = 2 * new->oldm * new->oldi + new->im_c;
-				if (new->newm * new->newm + new->newi * new->newi > 4)
-					break;
-				i++;
-			}
-				int max =  0x12345678;
-				int trgb = max * (i / 500.0);
-				my_mlx_pixel_put(new, new->xk, new->yk,  trgb);
+			new->i = 0;
+			i_breaker(new);
+			new->trgb = new->base_color * (new->i / 500.0);
+			my_mlx_pixel_put(new, new->xk, new->yk, new->trgb);
 			new->yk++;
 		}
 		new->xk++;
@@ -53,14 +26,7 @@ void render_image_m(t_vars *new, double x, double y, double zoom)
 
 void render_translation_m(t_vars *new, double x, double y)
 {
-	new->newm = 0;
-	new->newi = 0;
-	new->oldm = 0;
-	new->oldi = 0;
-	new->xk = 0;
-	new->yk = 0;
-	new->mx += x / 1920;
-	new->my += y / 1080;
+	init_translation(new, x, y);
 	while (new->xk < 1920)
 	{
 		new->yk = 0;
@@ -72,20 +38,10 @@ void render_translation_m(t_vars *new, double x, double y)
 			new->newi = 0;
 			new->oldm = 0;
 			new->oldi = 0;
-			int i = 0;
-			while (i < 500)
-			{
-				new->oldm = new->newm;
-				new->oldi = new->newi;
-				new->newm = new->oldm * new->oldm - new->oldi * new->oldi + new->re_c;
-				new->newi = 2 * new->oldm * new->oldi + new->im_c;
-				if (new->newm * new->newm + new->newi * new->newi > 4)
-					break;
-				i++;
-			}
-			int max =  0x12345678;
-				int trgb = max * (i / 500.0);
-				my_mlx_pixel_put(new, new->xk, new->yk,  trgb);
+			new->i = 0;
+			i_breaker(new);
+			new->trgb = new->base_color * (new->i / 500.0);
+			my_mlx_pixel_put(new, new->xk, new->yk, new->trgb);
 			new->yk++;
 		}
 		new->xk++;

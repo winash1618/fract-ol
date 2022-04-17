@@ -4,7 +4,7 @@ LIBX		=	libmlx.a
 INC_DIR		=	includes
 FRAMEWORK	=	-L $(LIBX_DIR) -lmlx -framework OpenGL -framework AppKit
 SRC_DIR		=	srcs
-SRCS		=	render_julia.c fractol.c events.c utils.c
+SRCS		=	render_julia.c fractol.c events.c utils.c render_mandelbrot.c
 OBJS		=	$(addprefix $(SRC_DIR)/, $(SRCS:%c=%o))
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -Ofast
@@ -16,7 +16,6 @@ all : $(NAME)
 
 $(NAME) : $(OBJS) $(LIBX)
 	@$(CC) $(CFLAGS) $(OBJS) $(FRAMEWORK) -o $(NAME)
-	@rm -f 4-julia_set_full.o
 
 $(LIBX):
 	@make -C $(LIBX_DIR)
