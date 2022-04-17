@@ -33,6 +33,7 @@ typedef struct	s_vars {
 	int		i;
 	int		trgb;
 	int		max_iter;
+	int		flag;
 }	t_vars;
 
 int key_check(int keycode, t_vars *new);
