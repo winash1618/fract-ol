@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_mandelbrot.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkaruvan <mkaruvan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/17 15:13:19 by mkaruvan          #+#    #+#             */
+/*   Updated: 2022/04/17 15:27:55 by mkaruvan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
 static void	init_mandelbrot(t_vars *new)
 {
-	double temp1;
-	double temp2;
+	double	temp1;
+	double	temp2;
 
-	temp1 =	1.5 * (new->xk - new->win_width / 2);
-	temp2 =(0.5 * new->zoom * new->win_width);
+	temp1 = 1.5 * (new->xk - new->win_width / 2);
+	temp2 = (0.5 * new->zoom * new->win_width);
 	new->re_c = temp1 / temp2 + new->mx;
 	temp1 = (new->yk - new->win_hight / 2);
 	temp2 = (0.5 * new->zoom * new->win_hight);
@@ -36,7 +48,7 @@ void	render_image_m(t_vars *new, double x, double y, double zoom)
 	}
 }
 
-void render_translation_m(t_vars *new, double x, double y)
+void	render_translation_m(t_vars *new, double x, double y)
 {
 	init_translation(new, x, y);
 	while (new->xk < new->win_width)

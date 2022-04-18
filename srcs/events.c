@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkaruvan <mkaruvan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/17 15:12:43 by mkaruvan          #+#    #+#             */
+/*   Updated: 2022/04/17 15:14:32 by mkaruvan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
 int	ft_exit(void)
@@ -34,17 +46,23 @@ int	key_check(int keycode, t_vars *new)
 		exit (1);
 	}
 	else if (keycode == 123)
-		event_activator(new, 10, 0);
-	else if (keycode == 124)
 		event_activator(new, -10, 0);
+	else if (keycode == 124)
+		event_activator(new, 10, 0);
 	else if (keycode == 125)
-		event_activator(new, 0, -10);
-	else if (keycode == 126)
 		event_activator(new, 0, 10);
+	else if (keycode == 126)
+		event_activator(new, 0, -10);
+	else if (keycode == 18)
+	{
+		color_shift(new, 0x3456789a);
+	}
+	else if (keycode == 19)
+		color_shift(new, 0x12563478);
 	return (0);
 }
 
-int mouse_move(int button, int x, int y, t_vars *new)
+int	mouse_move(int button, int x, int y, t_vars *new)
 {
 	if (button == 5)
 		zoom_activator(new, x, y, 1.3);
