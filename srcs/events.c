@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaruvan <mkaruvan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/17 15:12:43 by mkaruvan          #+#    #+#             */
-/*   Updated: 2022/04/17 15:14:32 by mkaruvan         ###   ########.fr       */
+/*   Created: 2022/04/18 13:47:30 by mkaruvan          #+#    #+#             */
+/*   Updated: 2022/04/18 16:57:37 by mkaruvan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ int	key_check(int keycode, t_vars *new)
 	else if (keycode == 126)
 		event_activator(new, 0, -10);
 	else if (keycode == 18)
-	{
 		color_shift(new, 0x3456789a);
-	}
 	else if (keycode == 19)
 		color_shift(new, 0x12563478);
 	return (0);

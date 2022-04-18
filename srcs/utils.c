@@ -6,7 +6,7 @@
 /*   By: mkaruvan <mkaruvan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 15:13:32 by mkaruvan          #+#    #+#             */
-/*   Updated: 2022/04/18 06:50:50 by mkaruvan         ###   ########.fr       */
+/*   Updated: 2022/04/18 13:44:41 by mkaruvan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	i_breaker(t_vars *new)
 		new->oldm = new->newm;
 		new->oldi = new->newi;
 		new->newm = new->oldm * new->oldm - new->oldi * new->oldi + new->re_c;
-		new->newi = 2 * new->oldm * new->oldi + new->im_c;
+		new->newi = 2 * new->oldm * new->oldi - new->im_c;
 		if (new->newm * new->newm + new->newi * new->newi > 4)
 			break ;
 		new->i++;

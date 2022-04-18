@@ -6,7 +6,7 @@
 /*   By: mkaruvan <mkaruvan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 15:13:10 by mkaruvan          #+#    #+#             */
-/*   Updated: 2022/04/18 06:42:46 by mkaruvan         ###   ########.fr       */
+/*   Updated: 2022/04/18 13:47:48 by mkaruvan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,4 @@ void	render_translation(t_vars *new, double x, double y)
 		}
 		new->xk++;
 	}
-	fflush(stdout);
 }
