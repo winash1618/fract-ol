@@ -6,7 +6,7 @@
 /*   By: mkaruvan <mkaruvan@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 15:12:16 by mkaruvan          #+#    #+#             */
-/*   Updated: 2023/06/03 07:13:30 by mkaruvan         ###   ########.fr       */
+/*   Updated: 2023/06/17 17:22:45 by mkaruvan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct	s_frac
 {
 	t_mlx		*mlx;
 	t_img		*img;
-
+	int			img_arr[WIN_WIDTH][WIN_HEIGHT];
 }				t_frac;
 
 
