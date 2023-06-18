@@ -6,7 +6,7 @@
 /*   By: mkaruvan <mkaruvan@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 15:12:16 by mkaruvan          #+#    #+#             */
-/*   Updated: 2023/06/18 08:48:52 by mkaruvan         ###   ########.fr       */
+/*   Updated: 2023/06/18 11:33:13 by mkaruvan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct s_mlx {
 
 typedef struct	s_point
 {
-	int			x;
-	int			y;
+	int		x;
+	int		y;
 }				t_point;
 
 typedef struct	s_frac
@@ -61,6 +61,7 @@ void render_sierpinski(t_frac *frac);
 /*********************** plot_line.c **********************/
 /**********************************************************/
 void plot_line(t_frac *frac, t_point p1, t_point p2);
+void plot_line_with_color(t_frac *frac, t_point p1, t_point p2, int color);
 
 /**********************************************************/
 /*********************** mlx_utils.c **********************/

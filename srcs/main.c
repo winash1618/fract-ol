@@ -10,7 +10,7 @@ void		help_message(void)
 	printf("\n\tUse \"./fractol menu\" to display the main menu window\n");
 }
 
-void	parsing(char *choice)
+void	parsing(t_frac *frac, char *choice)
 {
 	if (ft_strncmp(choice, "Mandelbrot", 10) == 0)
 		printf("Mandelbrot\n");
@@ -21,7 +21,7 @@ void	parsing(char *choice)
 	else if (ft_strncmp(choice, "Burning Julia", 13) == 0)
 		printf("Burning Julia\n");
 	else if (ft_strncmp(choice, "Sierpinski", 10) == 0)
-		printf("Sierpinski\n");
+		render_sierpinski(frac);
 	else if (ft_strncmp(choice, "Koch", 4) == 0)
 		printf("Koch\n");
 	else if (ft_strncmp(choice, "Barnsley", 8) == 0)
@@ -52,6 +52,80 @@ void draw_fill_triangle(t_frac *frac)
 	}
 }
 
+void draw_triangle(t_frac *frac, t_point *p)
+{
+	int i = 0;
+	while (i < 3)
+	{
+		if (i == 2)
+			plot_line(frac, p[i], p[0]);
+		else
+			plot_line(frac, p[i], p[i + 1]);
+		i++;
+	}
+}
+
+static void recursive_koch(t_frac *frac, t_point *p, int depth)
+{
+	if (depth == 0)
+	{
+		return ;
+	}
+	t_point *new_p;
+	new_p = (t_point *)malloc(sizeof(t_point) * 9);
+	new_p[0].x = p[0].x + (p[1].x - p[0].x) / 3.0;
+	new_p[0].y = p[0].y + (p[1].y - p[0].y) / 3.0;
+	new_p[1].x = p[0].x + (p[1].x - p[0].x) / 3.0 * 2.0;
+	new_p[1].y = p[0].y + (p[1].y - p[0].y) / 3.0 * 2.0;
+	new_p[2].x = (new_p[1].x - new_p[0].x) * cos(60.0 * M_PI / 180.0) - (new_p[1].y - new_p[0].y) * sin(60.0 * M_PI / 180.0) + new_p[0].x;
+	new_p[2].y = (new_p[1].x - new_p[0].x) * sin(60.0 * M_PI / 180.0) + (new_p[1].y - new_p[0].y) * cos(60.0 * M_PI / 180.0) + new_p[0].y;
+	new_p[3].x = p[1].x + (p[2].x - p[1].x) / 3.0;
+	new_p[3].y = p[1].y + (p[2].y - p[1].y) / 3.0;
+	new_p[4].x = p[1].x + (p[2].x - p[1].x) / 3.0 * 2.0;
+	new_p[4].y = p[1].y + (p[2].y - p[1].y) / 3.0 * 2.0;
+	new_p[5].x = (new_p[4].x - new_p[3].x) * cos(60.0 * M_PI / 180.0) - (new_p[4].y - new_p[3].y) * sin(60.0 * M_PI / 180.0) + new_p[3].x;
+	new_p[5].y = (new_p[4].x - new_p[3].x) * sin(60.0 * M_PI / 180.0) + (new_p[4].y - new_p[3].y) * cos(60.0 * M_PI / 180.0) + new_p[3].y;
+	new_p[6].x = p[2].x + (p[0].x - p[2].x) / 3.0;
+	new_p[6].y = p[2].y + (p[0].y - p[2].y) / 3.0;
+	new_p[7].x = p[2].x + (p[0].x - p[2].x) / 3.0 * 2.0;
+	new_p[7].y = p[2].y + (p[0].y - p[2].y) / 3.0 * 2.0;
+	new_p[8].x = (new_p[7].x - new_p[6].x) * cos(60.0 * M_PI / 180.0) - (new_p[7].y - new_p[6].y) * sin(60.0 * M_PI / 180.0) + new_p[6].x;
+	new_p[8].y = (new_p[7].x - new_p[6].x) * sin(60.0 * M_PI / 180.0) + (new_p[7].y - new_p[6].y) * cos(60.0 * M_PI / 180.0) + new_p[6].y;
+	plot_line_with_color(frac, new_p[0], new_p[1], 0);
+	plot_line(frac, new_p[2], new_p[1]);
+	plot_line(frac, new_p[2], new_p[0]);
+	plot_line_with_color(frac, new_p[3], new_p[4], 0);
+	plot_line(frac, new_p[4], new_p[5]);
+	plot_line(frac, new_p[5], new_p[3]);
+	plot_line_with_color(frac, new_p[7], new_p[6], 0);
+	plot_line(frac, new_p[6], new_p[8]);
+	plot_line(frac, new_p[7], new_p[8]);
+	recursive_koch(frac, new_p, depth - 1);
+	// recursive_koch(frac, (t_point[]){p[0], new_p[0], new_p[7]}, depth - 1);
+	recursive_koch(frac, new_p + 3, depth - 1);
+	// recursive_koch(frac, (t_point[]){new_p[1], p[1], new_p[3]}, depth - 1);
+	recursive_koch(frac, new_p + 6, depth - 1);
+	// recursive_koch(frac, (t_point[]){new_p[4], new_p[7], p[2]}, depth - 1);
+	free(new_p);
+}
+
+
+void render_koch(t_frac *frac)
+{
+	t_point *p;
+
+	p = (t_point *)malloc(sizeof(t_point) * 3);
+	p[0].x = 100.0;
+	p[0].y = 700.0;
+	p[1].x = 700.0;
+	p[1].y = 700.0;
+	p[2].x = 400.0;
+	p[2].y = 700.0 - sqrt(600.0 * 600.0 - 300.0 * 300.0);
+	frac->depth = 2;
+	draw_triangle(frac, p);
+	recursive_koch(frac, p, frac->depth);
+}
+
 
 int main(int argc, char **argv)
 {
@@ -75,7 +149,8 @@ int main(int argc, char **argv)
 	frac->img->addr = mlx_get_data_addr(frac->img->img, &frac->img->bits_per_pixel,
 			&frac->img->line_length, &frac->img->endian);
 	// draw_triangle(frac);
-	render_sierpinski(frac);
+	// render_sierpinski(frac);
+	render_koch(frac);
 	mlx_put_image_to_window(frac->mlx->mlx, frac->mlx->win, frac->img->img, 0, 0);
 	mlx_loop(frac->mlx->mlx);
 
