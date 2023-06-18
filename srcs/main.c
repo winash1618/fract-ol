@@ -10,14 +10,6 @@ void		help_message(void)
 	printf("\n\tUse \"./fractol menu\" to display the main menu window\n");
 }
 
-void	my_mlx_pixel_put(t_img *data, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
 void	parsing(char *choice)
 {
 	if (ft_strncmp(choice, "Mandelbrot", 10) == 0)
@@ -45,35 +37,21 @@ void	parsing(char *choice)
 	}
 }
 
-void draw_triangle(t_frac *frac)
+void draw_fill_triangle(t_frac *frac)
 {
-	int start_x;
-	int start_y;
-
-	start_x = 500;
-	start_y = 100;
-	int start = 0;
-	int count = 0;
-	while (start_y < 500)
+	int start_x = 500;
+	int k = 0;
+	for (int i = 100; i < start_x; i++)
 	{
-	printf("start_x = %d\n", start_x);
-	printf("start_y = %d\n", start_y);
-	printf("start = %d\n", start);
-	printf("count = %d\n", count);
-	printf("-------------------\n");
-	count = 0;
-		while (start_x <= 500 + start)
+		for (int j = 0; j < k; j++)
 		{
-			my_mlx_pixel_put(frac->img, 500 + count, start_y, 0x00FF0000);
-			my_mlx_pixel_put(frac->img, 500 - count, start_y, 0x00FF0000);
-			start_x++;
-			count++;
+			my_mlx_pixel_put(frac->img, start_x - j, i, 0x00FF0000);
+			my_mlx_pixel_put(frac->img, start_x + j, i, 0x00FF0000);
 		}
-		start= count;
-		start_x = start_x - count;
-		start_y++;
+		k++;
 	}
 }
+
 
 int main(int argc, char **argv)
 {
@@ -96,7 +74,8 @@ int main(int argc, char **argv)
 	frac->img->img = mlx_new_image(frac->mlx->mlx, IMG_WIDTH, IMG_HEIGHT);
 	frac->img->addr = mlx_get_data_addr(frac->img->img, &frac->img->bits_per_pixel,
 			&frac->img->line_length, &frac->img->endian);
-	draw_triangle(frac);
+	// draw_triangle(frac);
+	render_sierpinski(frac);
 	mlx_put_image_to_window(frac->mlx->mlx, frac->mlx->win, frac->img->img, 0, 0);
 	mlx_loop(frac->mlx->mlx);
 

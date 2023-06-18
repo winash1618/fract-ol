@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mkaruvan <mkaruvan@student.42abudhabi.ae>  +#+  +:+       +#+         #
+#    By: mkaruvan <mkaruvan@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/17 15:13:52 by mkaruvan          #+#    #+#              #
-#    Updated: 2022/04/17 15:13:56 by mkaruvan         ###   ########.fr        #
+#    Updated: 2023/06/18 08:48:09 by mkaruvan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FLAGS       := -Wall -Wextra -Werror
 
 INCLUDES    := -I includes -I mlx
 
-SRCS        := srcs/main.c
+SRCS        := srcs/main.c srcs/sierpinski.c srcs/plot_line.c srcs/mlx_utils.c
 
 OBJS        := $(SRCS:.c=.o)
 
