@@ -6,7 +6,7 @@
 #    By: mkaruvan <mkaruvan@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/17 15:13:52 by mkaruvan          #+#    #+#              #
-#    Updated: 2023/06/18 08:48:09 by mkaruvan         ###   ########.fr        #
+#    Updated: 2023/06/19 06:52:39 by mkaruvan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ FLAGS       := -Wall -Wextra -Werror
 
 INCLUDES    := -I includes -I mlx
 
-SRCS        := srcs/main.c srcs/sierpinski.c srcs/plot_line.c srcs/mlx_utils.c
+SRCS        := srcs/main.c srcs/sierpinski.c srcs/plot_line.c srcs/mlx_utils.c \
+				srcs/koch.c srcs/barnsley.c srcs/parsing.c srcs/canopy.c 
 
 OBJS        := $(SRCS:.c=.o)
 
